@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'Laravel-admin',
+    'name' => 'Waka-Gas',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,9 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>Laravel</b> admin',
+    // 'logo' => '<b>Waka Gas System</b> admin',
+    'logo' => '<img src = > WAKA GAS',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +36,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<b>La</b>',
+    'logo-mini' => '<b>Gas</b>',
 
     /*
     |--------------------------------------------------------------------------
@@ -153,7 +155,7 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`.
-        'disk' => 'admin',
+        'disk' => 'Admin',
 
         // Image and file upload path under the disk above.
         'directory' => [
@@ -275,7 +277,7 @@ return [
     |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
     |
     */
-    'skin' => env('ADMIN_SKIN', 'skin-purple'),
+    'skin' => env('ADMIN_SKIN', 'skin-blue'),
 
     /*
     |--------------------------------------------------------------------------

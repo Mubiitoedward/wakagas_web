@@ -15,9 +15,9 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('users', UserController::class);
     $router->resource('gas-categories', GasCategoryController::class);
-    $router->resource('products', ProductController::class);
-
-
-
+    $router->resource('light-weight-cylinders', LightWeightCylinderController::class);
+    $router->resource('heavy-wight-cylinders', HeavyWeightCylindersController::class);
+    $router->resource('orders', OrdersController::class);
+    $router->resource('order_details', Order_detailsController::class);
 
 });
