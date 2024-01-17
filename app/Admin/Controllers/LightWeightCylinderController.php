@@ -16,7 +16,7 @@ class LightWeightCylinderController extends AdminController
      *
      * @var string
      */
-    protected $title = 'LightWeightCylinder';
+    protected $title = 'Cylinder Registration';
 
     /**
      * Make a grid builder.
@@ -26,18 +26,43 @@ class LightWeightCylinderController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new LightWeightCylinder());
+        $grid->disableBatchActions();
 
-        $grid->column('id', __('Id'));
-        $grid->column('product_name', __('Product name'));
-        $grid->column('capacity', __('Capacity'));
-        $grid->column('stock_quantity', __('Stock quantity'));
-        $grid->column('refill_price', __('Refill price'));
-        $grid->column('initial_purchase_price', __('Initial purchase price'));
-        $grid->column('image_url', __('Image url light'));
-        $grid->column('created_by', __('Created by'));
-        $grid->column('updated_by', __('Updated by'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('id', __('Id'))->hide();
+        $grid->column('image_url', __('Image url light'))->lightbox(['zooming' => true,
+        'width' => 50, 'height' => 80,
+        'class' => ['circle', ''],]);
+        $grid->column('product_name', __('Product name'))
+        ->sortable();
+        $grid->column('capacity', __('Capacity'))
+        ->display(function($capacity){
+            return number_format($capacity).''.$this->measuring_units;
+        })->sortable();
+        $grid->column('stock_quantity', __('Number In Stock'))
+        ->sortable()
+        ->editable();
+        $grid->column('refill_price', __('Refill price(UGX)'))
+        ->display(function($refill_price){
+            return number_format($refill_price);
+              })
+        ->sortable()
+        ->editable();
+        $grid->column('initial_purchase_price', __('Initial purchase price(UGX)'))
+        ->display(function($initial_purchase_price){
+            return number_format($initial_purchase_price);
+
+        })->sortable();
+       
+        $grid->column('created_by', __('Created by'))
+        ->hide();
+       
+        $grid->column('updated_by', __('Updated by'))
+        ->hide();
+        $grid->column('created_at', __('Created at'))
+        ->display(function($created_at){
+            return date('d-m-Y',strtotime($created_at));
+        })->sortable();
+       
 
         return $grid;
     }
@@ -55,6 +80,7 @@ class LightWeightCylinderController extends AdminController
         $show->field('id', __('Id'));
         $show->field('product_name', __('Product name'));
         $show->field('capacity', __('Capacity'));
+        $show->field('measurig_units', __('Measuring Units'));
         $show->field('stock_quantity', __('Stock quantity'));
         $show->field('refill_price', __('Refill price'));
         $show->field('initial_purchase_price', __('Initial purchase price'));
@@ -80,18 +106,40 @@ class LightWeightCylinderController extends AdminController
         ->placeholder('Please select the gas cylinder label')
         ->rules('required')
         ->options(GasCategory::pluck('name', 'name'));
-        $form->number('capacity', __('Capacity'))
+        $form->decimal('capacity', __('Capacity'))
         ->rules('required');
-        $form->number('stock_quantity', __('Stock quantity'))
+        $form->text('measuring_units', __('Measuring Units'))
         ->rules('required');
-        $form->number('refill_price', __('Refill price'))
+        $form->decimal('stock_quantity', __('Number In Stock'))
         ->rules('required');
-        $form->number('initial_purchase_price', __('Initial purchase price'))
+        $form->decimal('refill_price', __('Refill price(UGX)'))
         ->rules('required');
-        $form->image('image_url', __('Image url light'))
+        $form->decimal('initial_purchase_price', __('Initial purchase price(UGX)'))
         ->rules('required');
-        $form->text('created_by', __('Created by'));
+        $form->image('image_url', __('Image url'))
+        ->uniqueName()
+        ->rules('required');
+        $form->text('created_by', __('Created by'))
+        ->required();
         $form->text('updated_by', __('Updated by'));
+
+        $form->footer(function ($footer) {
+
+            // disable reset btn
+            $footer->disableReset();
+        
+           
+        
+            // disable `View` checkbox
+            $footer->disableViewCheck();
+        
+            // disable `Continue editing` checkbox
+            $footer->disableEditingCheck();
+        
+            // disable `Continue Creating` checkbox
+            $footer->disableCreatingCheck();
+        
+        });
 
         return $form;
     }

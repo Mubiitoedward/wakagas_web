@@ -33,7 +33,7 @@ class HomeController extends Controller
                
                 $column->append($box);
 
-                $infoBox = new InfoBox('Light Cylinders', 'light_weight_cylinders', 'aqua', '/admin/light-weight-cylinders', '50');
+                $infoBox = new InfoBox('Light Cylinders', 'Cylinder Records', 'aqua', '/light-weight-cylinders', '50');
                 $infoBox->removable();
                 $infoBox->collapsable();
                 $infoBox->style('warning');

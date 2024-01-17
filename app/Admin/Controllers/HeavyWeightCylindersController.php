@@ -88,6 +88,7 @@ class HeavyWeightCylindersController extends AdminController
         $form->number('initial_purchase_price', __('Initial purchase price'))
         ->rules('required');
         $form->image('image_url', __('Image url heavy'))
+        ->image()
         ->rules('required');
         $form->text('created_by', __('Created by'));
         $form->text('updated_by', __('Updated by'));

@@ -155,11 +155,11 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`.
-        'disk' => 'Admin',
+        'disk' => 'admin',
 
         // Image and file upload path under the disk above.
         'directory' => [
-            'image' => 'images',
+            'image' => '/images',
             'file'  => 'files',
         ],
     ],
@@ -291,7 +291,7 @@ return [
     | "sidebar-mini".
     |
     */
-    'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    'layout' => ['', 'fixed'],
 
     /*
     |--------------------------------------------------------------------------
@@ -350,7 +350,7 @@ return [
     'minify_assets' => [
 
         // Assets will not be minified.
-        'excepts' => [
+        'excepts' => [ 
 
         ],
 
@@ -361,7 +361,7 @@ return [
     | Enable/Disable sidebar menu search
     |--------------------------------------------------------------------------
     */
-    'enable_menu_search' => true,
+    'enable_menu_search' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -407,6 +407,12 @@ return [
     |
     */
     'extensions' => [
+
+        'grid-lightbox' => [
+        
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
+        ]
 
     ],
 ];
