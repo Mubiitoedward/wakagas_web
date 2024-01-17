@@ -26,12 +26,17 @@ class Order_detailsController extends AdminController
     {
         $grid = new Grid(new Order_details());
 
-        $grid->column('orderid', __('Orderid'));
+        $grid->disableBatchActions();
+        $grid->disableCreateButton();
+        $grid->quickSearch('Name','type','price','userid');
+
+
+        $grid->column('orderid', __('Orderid'))->hide();
         $grid->column('userid', __('Userid'));
-        $grid->column('name', __('Name'));
-        $grid->column('quantity', __('Quantity'));
-        $grid->column('type', __('Type'));
-        $grid->column('price', __('Price'));
+        $grid->column('name', __('Name'))->sortable();
+        $grid->column('quantity', __('Quantity'))->sortable();
+        $grid->column('type', __('Type'))->sortable();
+        $grid->column('price', __('Price'))->sortable();
 
         return $grid;
     }

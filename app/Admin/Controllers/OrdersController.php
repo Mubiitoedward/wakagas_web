@@ -25,16 +25,25 @@ class OrdersController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Orders());
+        $grid->disableBatchActions();
+        $grid->disableCreateButton();
+        $grid->quickSearch('deliverytime','deliveryday','address','payment_method');
 
-        $grid->column('orderid', __('Orderid'));
+        $grid->column('orderid', __('Orderid'))->hide();
         $grid->column('userid', __('Userid'));
-        $grid->column('deliveryday', __('Deliveryday'));
-        $grid->column('deliverytime', __('Deliverytime'));
-        $grid->column('payment_method', __('Payment method'));
-        $grid->column('address', __('Address'));
-        $grid->column('status', __('Status'));
-        $grid->column('date', __('Date'));
-        $grid->column('totalprice', __('Totalprice'));
+        $grid->column('deliveryday', __('Deliveryday'))->sortable();
+        $grid->column('deliverytime', __('Deliverytime'))->sortable();
+        $grid->column('payment_method', __('Payment method'))->sortable();
+        $grid->column('address', __('Address'))->sortable();
+        $grid->column('status', __('Status'))
+        ->label([
+            'delivered'=>'success',
+            'pending'=>'warning',
+            'cancelled'=>'danger'
+
+        ])->sortable();
+        $grid->column('date', __('Date'))->sortable();
+        $grid->column('totalprice', __('Totalprice'))->sortable();
 
         return $grid;
     }
