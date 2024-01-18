@@ -28,12 +28,12 @@ class HomeController extends Controller
                 $box = new Box('Users Details', 'Info');
                 $box->removable();
                 $box->collapsable();
-                $box->style('success');
+                 $box->style('success');
                 $box->solid();
                
                 $column->append($box);
 
-                $infoBox = new InfoBox('Light Cylinders', 'Cylinder Records', 'aqua', '/light-weight-cylinders', '50');
+                $infoBox = new InfoBox('Cylinders Records', 'Cylinder Records', 'aqua', '/light-weight-cylinders', '{$Cylinders}');
                 $infoBox->removable();
                 $infoBox->collapsable();
                 $infoBox->style('warning');
