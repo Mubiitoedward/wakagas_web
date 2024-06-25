@@ -1,6 +1,6 @@
-<div class="box box-primary">
+<div class="box box-success">
     <div class="box-header with-border">
-        <h3 class="box-title">Line Chart</h3>
+        <h3 class="box-title" style="font-weight: bold; text-align: center;">Total Users by Month</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse">
                 <i class="fa fa-minus"></i>
@@ -15,20 +15,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var ctx = document.getElementById('lineChart').getContext('2d');
+        var lineChartData = @json($lineChartData);
         var lineChart = new Chart(ctx, {
             type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Monthly Sales',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    backgroundColor: 'rgba(54, 162, 235, 1)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.4
-                }]
-            },
+            data: lineChartData,
             options: {
                 scales: {
                     x: {

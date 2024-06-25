@@ -1,3 +1,12 @@
+<?php
+
+?>
+
+
+
+
+
+
 <div class="box box-success">
     <div class="box-header with-border">
         <h3 class="box-title" style="font-weight: bold; text-align: center;">Cylinder Sales by Month</h3>

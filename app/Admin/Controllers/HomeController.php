@@ -42,6 +42,26 @@ class HomeController extends Controller
             'datasets' => []
         ];
 
+        // Fetch total users per month
+        $userCounts = User::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('COUNT(*) as total')
+        )
+        ->groupBy('month')
+        ->get()
+        ->keyBy('month');
+
+        // Prepare data for the line chart
+        $lineChartData = [
+            'labels' => [],
+            'datasets' => [
+                [
+                    'label' => 'Total Users',
+                    'data' => [],
+                    'borderColor' => '#3e95cd',
+                    'fill' => false
+                ] ]];
+
         $categories = Order_details::select('name')->distinct()->get();
         $months = [
             1 => 'January',
@@ -57,6 +77,12 @@ class HomeController extends Controller
             11 => 'November',
             12 => 'December'
         ];
+
+
+        foreach ($months as $month => $monthName) {
+            $lineChartData['labels'][] = $monthName;
+            $lineChartData['datasets'][0]['data'][] = $userCounts->has($month) ? $userCounts[$month]->total : 0;
+        }
 
         foreach ($categories as $category) {
             $dataset = [
@@ -79,11 +105,17 @@ class HomeController extends Controller
 
         $chartData['labels'] = array_values($months);
 
+        // $events = [
+        //     ['title' => 'Event 1', 'start' => '2024-06-10'],
+        //     ['title' => 'Event 2', 'start' => '2024-06-15'],
+        //     ['title' => 'Event 3', 'start' => '2024-06-20'],
+        // ];
+
         return $content
             ->title('Dashboard')
             ->description('Welcome to the dashboard')
             ->header('Waka Gas')
-            ->row(function (Row $row) use ($totalUsers, $totalOrders, $totalCategories, $chartData) {
+            ->row(function (Row $row) use ($totalUsers, $totalOrders, $totalCategories, $chartData, $lineChartData ) {
 
                 // First row for InfoBoxes and Box
                 $row->column(12, function (Column $column) use ($totalUsers, $totalOrders, $totalCategories) {
@@ -120,11 +152,23 @@ class HomeController extends Controller
                 // Second row for charts
                 $row->column(12, function (Column $column) use ($chartData) {
                     $column->row(function (Row $row) use ($chartData) {
-                        $row->column(12, function (Column $column) use ($chartData) {
+                        $row->column(6, function (Column $column) use ($chartData) {
                             $column->append(view('admin.charts.bar_chart', compact('chartData')));
                         });
-                    });
+                        // Third row for the calendar
+                $row->column(6, function (Column $column) {
+                    $column->append(view('admin.charts.calendar',));
+                });                       
+                    });        
                 });
+
+                $row->column(12, function (Column $column) use ($lineChartData) {
+                    $column->append(view('admin.charts.line_chart', compact('lineChartData')));
+                });
+                
+                
             });
+            
+
     }
 }
