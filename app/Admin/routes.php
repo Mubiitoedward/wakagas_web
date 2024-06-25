@@ -19,5 +19,6 @@ Route::group([
     $router->resource('heavy-wight-cylinders', HeavyWeightCylindersController::class);
     $router->resource('orders', OrdersController::class);
     $router->resource('order_details', Order_detailsController::class);
+    $router->resource('accessories', AccessoriesController::class); 
 
 });

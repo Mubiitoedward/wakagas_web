@@ -301,9 +301,10 @@ return [
     | This value is used to set the background image of login page.
     |
     */
-    'login_background_image' => '',
+    'login_background_image' => '/storage/images/burner-with-flame.jpg',
 
     /*
+
     |--------------------------------------------------------------------------
     | Show version at footer
     |--------------------------------------------------------------------------
@@ -355,6 +356,18 @@ return [
         ],
 
     ],
+
+    'assets' => [
+    'css' => [
+        'dist/css/adminlte.min.css',
+        // Add other required CSS files here
+    ],
+    'js' => [
+        'dist/js/adminlte.min.js',
+        // Add other required JS files here
+    ],
+],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -409,6 +422,11 @@ return [
     'extensions' => [
 
         'grid-lightbox' => [
+        
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
+        ],
+        'chartjs' => [
         
             // Set to `false` if you want to disable this extension
             'enable' => true,
