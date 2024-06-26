@@ -1,6 +1,6 @@
-<div class="box box-info">
+<div class="box box-success">
     <div class="box-header with-border">
-        <h3 class="box-title">Area Chart</h3>
+        <h3 class="box-title" style="font-weight: bold; text-align: center;">Total Orders by Address</h3>
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse">
                 <i class="fa fa-minus"></i>
@@ -15,20 +15,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var ctx = document.getElementById('areaChart').getContext('2d');
+        var areaChartData = @json($areaChartData);
         var areaChart = new Chart(ctx, {
             type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Monthly Sales',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
+            data: areaChartData,
             options: {
                 scales: {
                     x: {
@@ -41,6 +31,11 @@
                         grid: {
                             display: false
                         }
+                    }
+                },
+                elements: {
+                    line: {
+                        fill: true
                     }
                 }
             }
