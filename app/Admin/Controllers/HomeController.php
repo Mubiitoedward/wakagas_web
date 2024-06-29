@@ -27,14 +27,14 @@ class HomeController extends Controller
 
         // Fetch data for the bar chart
         $cylinderSales = Order_details::select(
-            DB::raw('MONTH(date) as month'),
-            'orderid',
-            DB::raw('SUM(quantity) as total_quantity')
+            DB::raw('DATE_FORMAT(date, "%Y-%m") as month'),
+            'name',
+            DB::raw('SUM(quantity) as total_quantity'),
+            DB::raw('SUM(price) as total_sales')
         )
-        ->groupBy('month', 'orderid')
+        ->groupBy('month', 'name')
         ->get();
         $cylinderSales = collect($cylinderSales);
-
 
         // Prepare data for the chart
         $chartData = [
@@ -60,10 +60,9 @@ class HomeController extends Controller
                     'data' => [],
                     'borderColor' => '#3e95cd',
                     'fill' => false
-                ] ]];
-
-              
-        
+                ]
+            ]
+        ];
 
         $categories = Order_details::select('name')->distinct()->get();
         $months = [
@@ -81,7 +80,6 @@ class HomeController extends Controller
             12 => 'December'
         ];
 
-
         foreach ($months as $month => $monthName) {
             $lineChartData['labels'][] = $monthName;
             $lineChartData['datasets'][0]['data'][] = $userCounts->has($month) ? $userCounts[$month]->total : 0;
@@ -94,7 +92,7 @@ class HomeController extends Controller
                 'backgroundColor' => sprintf('#%06X', mt_rand(0, 0xFFFFFF)),
                 'borderColor' => sprintf('#%06X', mt_rand(0, 0xFFFFFF)),
                 'borderWidth' => 2
-            ];
+            ]; 
 
             foreach ($months as $month => $monthName) {
                 $sale = $cylinderSales->first(function($item) use ($month, $category) {
@@ -108,15 +106,8 @@ class HomeController extends Controller
 
         $chartData['labels'] = array_values($months);
 
-        // $events = [
-        //     ['title' => 'Event 1', 'start' => '2024-06-10'],
-        //     ['title' => 'Event 2', 'start' => '2024-06-15'],
-        //     ['title' => 'Event 3', 'start' => '2024-06-20'],
-        // ];
-
-
-         // Aggregate orders by area
-         $ordersByArea = Orders::select(
+        // Aggregate orders by area
+        $ordersByArea = Orders::select(
             'address',
             DB::raw('COUNT(*) as total_orders')
         )
@@ -132,41 +123,39 @@ class HomeController extends Controller
                     'label' => 'Total Orders by Area',
                     'data' => $ordersByArea->pluck('total_orders')->toArray(),
                     'backgroundColor' => 'rgba(75, 192, 192, 1)',
-                    'borderColor' => 'rgba(75, 192, 192, 1) ',
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
                     'borderWidth' => 1
                 ]
             ]
         ];
 
- // Aggregate orders by payment method
- $paymentMethods = Orders::select(
-    'payment_method',
-    DB::raw('COUNT(*) as total_orders')
-)
-->groupBy('payment_method')
-->get();
+        // Aggregate orders by payment method
+        $paymentMethods = Orders::select(
+            'payment_method',
+            DB::raw('COUNT(*) as total_orders')
+        )
+        ->groupBy('payment_method')
+        ->get();
 
-// Prepare data for the pie chart
-$pieChartData = [
-    'labels' => $paymentMethods->pluck('payment_method')->toArray(),
-    'datasets' => [
-        [
-            'data' => $paymentMethods->pluck('total_orders')->toArray(),
-            'backgroundColor' => ['#FF6384', '#36A2EB', '#FFCE56'],
-            'hoverBackgroundColor' => ['#FF6384', '#36A2EB', '#FFCE56']
-        ]
-    ]
-];
-    
-
+        // Prepare data for the pie chart
+        $pieChartData = [
+            'labels' => $paymentMethods->pluck('payment_method')->toArray(),
+            'datasets' => [
+                [
+                    'data' => $paymentMethods->pluck('total_orders')->toArray(),
+                    'backgroundColor' => ['#FF6384', '#36A2EB', '#FFCE56'],
+                    'hoverBackgroundColor' => ['#FF6384', '#36A2EB', '#FFCE56']
+                ]
+            ]
+        ];
 
         return $content
             ->title('Dashboard')
             ->description('Welcome to the dashboard')
             ->header('Waka Gas')
-            ->row(function (Row $row) use ($totalUsers, $totalOrders, $totalCategories, $chartData, $lineChartData, $areaChartData, $pieChartData ) {
+            ->row(function (Row $row) use ($totalUsers, $totalOrders, $totalCategories, $chartData, $lineChartData, $areaChartData, $pieChartData) {
 
-                // First row for InfoBoxes and Box
+                // First row for InfoBoxes
                 $row->column(12, function (Column $column) use ($totalUsers, $totalOrders, $totalCategories) {
                     $column->row(function (Row $row) use ($totalUsers, $totalOrders, $totalCategories) {
                         $row->column(4, function (Column $column) use ($totalUsers) {
@@ -198,42 +187,45 @@ $pieChartData = [
                     });
                 });
 
-                // Second row for charts
-                $row->column(12, function (Column $column) use ($chartData) {
-                    $column->row(function (Row $row) use ($chartData) {
+
+                // 2rd row for the first two charts
+                $row->column(12, function (Column $column) use ($chartData, $lineChartData) {
+                    $column->row(function (Row $row) use ($chartData, $lineChartData) {
                         $row->column(6, function (Column $column) use ($chartData) {
                             $column->append(view('admin.charts.bar_chart', compact('chartData')));
                         });
-                        // Third row for the calendar
-                $row->column(6, function (Column $column) {
-                    $column->append(view('admin.charts.calendar',));
-                });                       
-                    });        
+                        $row->column(6, function (Column $column) use ($lineChartData) {
+                            $column->append(view('admin.charts.line_chart', compact('lineChartData')));
+                        });
+                    });
                 });
 
 
-                $row->column(12, function (Column $column) use ($areaChartData) {
-                    $column->append(view('admin.charts.area_chart', compact('areaChartData')));
+                // 3rd row for the next two charts
+                $row->column(12, function (Column $column) use ( $pieChartData) {
+                    $column->row(function (Row $row) use ( $pieChartData) {
+                        
+                        $row->column(6, function (Column $column) use ($pieChartData) {
+                            $column->append(view('admin.charts.pie_chart', compact('pieChartData')));
+                        });
+
+                        $row->column(6, function (Column $column) {
+                            $column->append(view('admin.charts.calendar'));
+                        });
+
+                    });
                 });
+ 
+                // 4th row for the next two charts
+                $row->column(12, function (Column $column) use ($areaChartData,) {
+                    $column->row(function (Row $row) use ($areaChartData,) {
+                        
+                        $row->column(12, function (Column $column) use ($areaChartData) {
+                            $column->append(view('admin.charts.area_chart', compact('areaChartData')));
+                        });
 
-
-                 // Fourth row for the pie chart
-                 $row->column(12, function (Column $column) use ($pieChartData) {
-                    $column->append(view('admin.charts.pie_chart', compact('pieChartData')));
+                    });
                 });
-
-                
-                // Second row for the line chart
-                $row->column(12, function (Column $column) use ($lineChartData) {
-                    $column->append(view('admin.charts.line_chart', compact('lineChartData')));
-                });
-
-                
-                
             });
-
-            
-            
-
     }
 }

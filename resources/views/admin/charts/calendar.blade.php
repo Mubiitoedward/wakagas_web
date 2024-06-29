@@ -15,21 +15,21 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
 <style>
     .fc {
-        --fc-page-bg-color: #923a3a;
-        --fc-border-color: #923a3a;
-        --fc-header-bg-color: #4b0000;
+        --fc-page-bg-color: #3a923a;
+        --fc-border-color: #3a923a;
+        --fc-header-bg-color: #004b00;
         --fc-header-text-color: #ffffff;
-        --fc-day-bg-color: #923a3a;
-        --fc-day-border-color: #4b0000;
-        --fc-today-bg-color: #4b0000;
-        --fc-today-border-color: #4b0000;
-        --fc-highlight-bg-color: #4b0000;
-        --fc-highlight-border-color: #4b0000;
-        --fc-event-bg-color: #b30000;
-        --fc-event-border-color: #4b0000;
+        --fc-day-bg-color: #3a923a;
+        --fc-day-border-color: #004b00;
+        --fc-today-bg-color: #004b00;
+        --fc-today-border-color: #004b00;
+        --fc-highlight-bg-color: #004b00;
+        --fc-highlight-border-color: #004b00;
+        --fc-event-bg-color: #00b300;
+        --fc-event-border-color: #004b00;
         --fc-event-text-color: #ffffff;
-        --fc-event-selected-bg-color: #4b0000;
-        --fc-event-selected-border-color: #4b0000;
+        --fc-event-selected-bg-color: #004b00;
+        --fc-event-selected-border-color: #004b00;
     }
     .fc .fc-toolbar {
         background-color: var(--fc-header-bg-color);
